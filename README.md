@@ -5,6 +5,7 @@
 # records
 
 in IGF1R/INSR
+the IGF1R is from human
 the relationship between chain ID and structure is:
 
 - A: IGF1R
@@ -12,11 +13,55 @@ the relationship between chain ID and structure is:
 - D: IGF1
 
 in IGF1R/IGF1R
+the IGF1R is from mouse
 the relationship between chain ID and structure is:
 
 - A: changed IGF1R
 - B: IGF1
 - D: IGF1R
+
+If I want to mutant mouse IGF1R to human IGF1R, I need to mutant those residues.
+The sequence index is for mouse IGF1R.
+
+```text
+28 F->Y
+125 I->V
+156 L->M
+188 V->T
+210 H->S
+211 T->A
+214 D->N
+215 N->D
+217 T->A
+227 K->A
+237 G->N
+256 P->L
+257 N->S
+264 D->E
+271 D->G
+285 S->G
+286 T->S
+303 G->E
+304 D d
+327 L->F
+406 N->D
+412 V->I
+413 R->K
+414 S->A
+465 R->H
+472 W->S
+532 E->D
+533 G->V
+606 T->S
+651 V->I
+666 D->E
+709 R->K
+730 V->A
+742 F->L
+896 P->Q
+```
+
+`input/6PYH.pse` show those mutant residues.
 
 ## `compare_sequence.py`
 
@@ -24,18 +69,30 @@ first, we compared the sequence with fasta information, for original structure (
 
 ### Input
 
-#### `input/6PYH.pdb`
+- `input/P08069_7S0Q_chainA.fasta`: P08069 is the full length sequence of human IGF1R
+- `input/P05019_6PYH_chainB.fasta`: P05019 is the full length sequence of human IGF1
+- `input/P08069_7S0Q_chainD.fasta`: P08069 is the full length sequence of human IGF1R
+- `input/Q60751_6PYH_chainA.fasta`: Q60751 is the full length sequence of mouse IGF1R
+- `input/P05019_6PYH_chainB.fasta`: P05019 is the full length sequence of human IGF1
+- `input/Q60751_6PYH_chainD.fasta`: Q60751 is the full length sequence of mouse IGF1R
+- `rcsb_pdb_6PYH.fasta`: sequence of 6PYH
+- `input/initial.pdb`: soft link of `input/6PYH.pdb`, the structure of mouse IGF1R/IGF1R with IGF1
 
-`input/initial.pdb` is a soft link of `input/6PYH.pdb`.
+### Output
 
-#### `input/P08069_6PHY_chainA.pdb`
+- `result/human_fasta_A.dat`: the sequence of human IGF1R
+- `result/human_fasta_B.dat`: the sequence of human IGF1
+- `result/human_fasta_D.dat`: the sequence of human IGF1R
+- `result/mouse_fasta_A.dat`: the sequence of mouse IGF1R
+- `result/mouse_fasta_B.dat`: the sequence of human IGF1
+- `result/mouse_fasta_D.dat`: the sequence of mouse IGF1R
+- `result/pdb_fasta_A.dat`: the sequence of 6PYH of mouse IGF1R
+- `result/pdb_fasta_B.dat`: the sequence of 6PYH of human IGF1
+- `result/pdb_fasta_D.dat`: the sequence of 6PYH of mouse IGF1R
+- `result/pdb_A.dat`: the sequence of structure in 6PYH of mouse IGF1R
+- `result/pdb_B.dat`: the sequence of structure in 6PYH of human IGF1
+- `result/pdb_D.dat`: the sequence of structure in 6PYH of mouse IGF1R
 
-P08069 is the full length sequence of human IGF1R.
+## `generate_input_boltz2.py`
 
-#### `input/P05019_6PHY_chainB.pdb`
-
-P05019 is the full length sequence of human IGF1.
-
-#### `input/P08069_6PHY_chainD.pdb`
-
-soft link of `input/P05019_6PHY_chainA.pdb`
+## `generate_input_chai.py`
