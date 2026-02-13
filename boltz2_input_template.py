@@ -67,8 +67,7 @@ def main():
         ],
         "templates":
         [
-            {"cif": config['cif_path'], "chain_id": ['A', 'B', 'C'], "template_id": ['C', 'A', 'B']}
-
+            {"cif": config['cif_path'], "chain_id": ['A', 'B', 'C'], "template_id": ['C', 'A', 'B']},
         ],
     }
     output_boltz2_yaml(config['outname'], yaml_dict)
