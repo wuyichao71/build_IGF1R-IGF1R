@@ -65,12 +65,11 @@ def main():
             {"protein": {"id": ['A', 'B'], "sequence": human_IGF1R_fasta.seq[0][IGF1R_ini:IGF1R_lst]}},
             {"protein": {"id": 'C', "sequence": human_IGF1_fasta.seq[0][IGF1_ini:IGF1_lst]}},
         ],
-        # "templates":
-        # [
-        #     {"cif": config['cif_path'], "chain_id": ['A', 'B', 'C'], "template_id": ['D', 'A', 'B']}
-
-        # ]
-                }
+        "templates":
+        [
+            {"cif": config['cif_path'], "chain_id": ['A', 'B', 'C'], "template_id": ['C', 'A', 'B']},
+        ],
+    }
     output_boltz2_yaml(config['outname'], yaml_dict)
 
 

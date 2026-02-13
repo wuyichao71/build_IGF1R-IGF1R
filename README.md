@@ -93,6 +93,41 @@ first, we compared the sequence with fasta information, for original structure (
 - `result/pdb_B.dat`: the sequence of structure in 6PYH of human IGF1
 - `result/pdb_D.dat`: the sequence of structure in 6PYH of mouse IGF1R
 
-## `generate_input_boltz2.py`
+## `boltz2_input.py`
 
-## `generate_input_chai.py`
+python language
+generate input for boltz2, only input sequence.
+output is `boltz2_input/boltz2_input.yaml`
+structure is apo state
+
+## `boltz2_input_template.py`
+
+python language
+generate input for boltz2, provide template, but without force.
+output is `boltz2_input/boltz2_input_template.yaml`
+structure is apo state
+
+## `boltz2_input_template_force.py`
+
+python language
+generate input for boltz2, provide template, with force.
+threshold for force is 4.3
+output is `boltz2_input/boltz2_input_template_force.yaml`
+structure is strange.
+
+## `boltz2_input_template_force_potentials.py`
+
+python language
+generate input for boltz2, provide template, with force.
+threshold for force is 12.0
+add `--use_potentials` flag
+output is `boltz2_input/boltz2_input_template_force.yaml`
+structure is strange.
+
+## `boltz2_input_template_force-1.0.py`
+
+python language
+generate input for boltz2, provide template, with force.
+the threshold is from file name
+output is `boltz2_input/boltz2_input_template_force-1.0.yaml`
+structure is strange.

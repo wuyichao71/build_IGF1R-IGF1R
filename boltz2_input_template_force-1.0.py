@@ -1,6 +1,7 @@
 import yaml
 from pathlib import Path
 import os
+import re
 
 config = {
     "human_IGF1R_fasta": os.path.join("input", "P08069_7S0Q_chainA.fasta"),
@@ -17,6 +18,7 @@ config = {
 def set_config():
     name = Path(__file__).with_suffix('.yaml').name
     config["outname"] = os.path.join("boltz2_input", name)
+    # tokens = Path(__file__).stem.split('_')
 
 
 class FastaInfo():
@@ -65,12 +67,18 @@ def main():
             {"protein": {"id": ['A', 'B'], "sequence": human_IGF1R_fasta.seq[0][IGF1R_ini:IGF1R_lst]}},
             {"protein": {"id": 'C', "sequence": human_IGF1_fasta.seq[0][IGF1_ini:IGF1_lst]}},
         ],
-        # "templates":
-        # [
-        #     {"cif": config['cif_path'], "chain_id": ['A', 'B', 'C'], "template_id": ['D', 'A', 'B']}
-
-        # ]
-                }
+    }
+    if 'template' in __file__:
+        yaml_dict["templates"] = [
+            {"cif": config['cif_path'], "chain_id": ['A', 'B', 'C'], "template_id": ['C', 'A', 'B']},
+        ]
+    if 'force' in __file__:
+        yaml_dict["templates"][0]["force"] = True
+        threshold = 4.3
+        match = re.search(r'force-([0-9.]+)', Path(__file__).stem)
+        if match:
+            threshold = float(match.group(1))
+        yaml_dict["templates"][0]["threshold"] = threshold
     output_boltz2_yaml(config['outname'], yaml_dict)
 
 
