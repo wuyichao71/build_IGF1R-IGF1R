@@ -1,16 +1,11 @@
-#!~/data/software/miniconda3/envs/chai_lab/bin/python
+#!/home/2/uj02562/data/software/miniconda3/envs/chai_lab/bin/python
 
 from pathlib import Path
 from fastainfo import FastaInfo
 import os
-try:
-    from chai_lab.chai1 import run_inference
-except:
-    pass
-try:
-    import torch
-except:
-    pass
+import sys
+import subprocess
+import grp
 
 config = {
     "human_IGF1R_fasta": os.path.join("input", "P08069_7S0Q_chainA.fasta"),
@@ -30,12 +25,31 @@ config = {
 """
 }
 
+
 def set_config():
-    config["fasta_name"]= os.path.join("chai-lab_input", Path(__file__).with_suffix('.fasta').name)
+    config["fasta_name"] = os.path.join("chai-lab_input", Path(__file__).with_suffix('.fasta').name)
     config["outdir"] = os.path.join("chai-lab_output", Path(__file__).stem)
 
 
-def main():
+def in_grid_engine_job() -> bool:
+    """
+    judge whether the job is on the compute node.
+    """
+    return ("JOB_ID" in os.environ) or ("SGE_TASK_ID" in os.environ) or ("PE_HOSTFILE" in os.environ)
+
+
+def run():
+    try:
+        from chai_lab.chai1 import run_inference
+        print("load run_inference")
+    except Exception:
+        pass
+    try:
+        import torch
+        print("load torch")
+    except Exception:
+        pass
+    set_config()
     human_IGF1R_fasta = FastaInfo(config['human_IGF1R_fasta'])
     human_IGF1_fasta = FastaInfo(config['human_IGF1_fasta'])
     IGF1R_ini = config['human_IGF1R_initial']
@@ -59,10 +73,12 @@ def main():
     output_dir.mkdir(parents=True, exist_ok=True)
 
     device = "cpu"
-    if 'torch' in globals():
+    if 'torch' in locals():
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    if 'run_inference' in globals():
-        candidates = run_inference(
+        print(f"device is {device}")
+    print("Run run_inference")
+    if 'run_inference' in locals():
+        run_inference(
             fasta_file=fasta_path,
             output_dir=output_dir,
             # 'default' setup
@@ -72,9 +88,41 @@ def main():
             device=device,
             use_esm_embeddings=True,
         )
+    print("Job finished!")
 
+
+def submit():
+    TIME = "00:30:00"
+    QUEUE = "gpu_h"
+    NODE = 1
+    GROUP = grp.getgrgid(os.getgroups()[-1]).gr_name
+    JOB_NAME = Path(__file__).stem
+    py = sys.executable
+    script = Path(__file__).name
+    qsub_cmd = [
+            'qsub',
+            '-cwd',
+            '-g', GROUP,
+            '-l', f'h_rt={TIME}',
+            '-l', f'{QUEUE}={NODE}',
+            '-o', f'stdout/{JOB_NAME}.log',
+            '-j', 'y',
+            '-b', 'y',
+            py, str(script),
+            ]
+    print("Submitting:", " ".join(map(str, qsub_cmd)))
+    subprocess.run(qsub_cmd, check=True)
+
+
+def main():
+    """
+    main function
+    """
+    if ('--submit' in sys.argv) or not in_grid_engine_job():
+        submit()
+    else:
+        run()
 
 
 if __name__ == "__main__":
-    set_config()
     main()
