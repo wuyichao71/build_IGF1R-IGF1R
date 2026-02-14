@@ -6,6 +6,7 @@ import os
 import sys
 import subprocess
 import grp
+import shutil
 
 config = {
     "human_IGF1R_fasta": os.path.join("input", "P08069_7S0Q_chainA.fasta"),
@@ -14,7 +15,6 @@ config = {
     "human_IGF1_fasta": os.path.join("input", "P05019_6PYH_chainB.fasta"),
     "human_IGF1_initial": 50,
     "human_IGF1_length": 61,
-
     "fasta_template": """
 >protein|name={IGF1R_name}-A
 {IGF1R_seq}
@@ -22,13 +22,22 @@ config = {
 {IGF1R_seq}
 >protein|name={IGF1_name}-C
 {IGF1_seq}
-"""
+""",
+    "esm": False,
+    "use_msa_server": False,
+    "use_templates_server": False,
 }
 
 
 def set_config():
+    stem = Path(__file__).stem
     config["fasta_name"] = os.path.join("chai-lab_input", Path(__file__).with_suffix('.fasta').name)
-    config["outdir"] = os.path.join("chai-lab_output", Path(__file__).stem)
+    config["outdir"] = os.path.join("chai-lab_output", stem)
+    if "esm" in stem:
+        config["esm"] = True
+    if "template" in stem:
+        config["use_msa_server"] = True
+        config["use_templates_server"] = True
 
 
 def in_grid_engine_job() -> bool:
@@ -71,33 +80,36 @@ def run():
 
     output_dir = Path(config['outdir'])
     output_dir.mkdir(parents=True, exist_ok=True)
+    shutil.rmtree(output_dir)
 
     device = "cpu"
     if 'torch' in locals():
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         print(f"device is {device}")
     print("Run run_inference")
+    print(config["esm"])
     if 'run_inference' in locals():
-        run_inference(
+        candidates = run_inference(
             fasta_file=fasta_path,
             output_dir=output_dir,
-            # 'default' setup
             num_trunk_recycles=3,
-            num_diffn_timesteps=200,
-            seed=42,
             device=device,
-            use_esm_embeddings=True,
+            use_esm_embeddings=config['esm'],
+            use_msa_server=config["use_msa_server"],
+            use_templates_server=config["use_templates_server"]
         )
     print("Job finished!")
 
 
 def submit():
-    TIME = "00:30:00"
+    TIME = "02:00:00"
     QUEUE = "gpu_h"
     NODE = 1
     GROUP = grp.getgrgid(os.getgroups()[-1]).gr_name
     JOB_NAME = Path(__file__).stem
-    py = sys.executable
+    with open(__file__, 'r') as f:
+        py = f.readline().split('!')[1].strip()
+    print(py)
     script = Path(__file__).name
     qsub_cmd = [
             'qsub',
