@@ -63,6 +63,8 @@ The sequence index is for mouse IGF1R.
 
 `input/6PYH.pse` show those mutant residues.
 
+# compare
+
 ## `compare_sequence.py`
 
 first, we compared the sequence with fasta information, for original structure (`input/6PYH.pdb`).
@@ -93,6 +95,11 @@ first, we compared the sequence with fasta information, for original structure (
 - `result/pdb_B.dat`: the sequence of structure in 6PYH of human IGF1
 - `result/pdb_D.dat`: the sequence of structure in 6PYH of mouse IGF1R
 
+# boltz2
+
+script for run boltz2
+boltz2 can not get right heterodimer of IGF1R/IGF1R
+
 ## `boltz2_input.py`
 
 python language
@@ -115,6 +122,14 @@ threshold for force is 4.3
 output is `boltz2_input/boltz2_input_template_force.yaml`
 structure is strange.
 
+## `boltz2_input_template_force-1.0.py`
+
+python language
+generate input for boltz2, provide template, with force.
+the threshold is from file name
+output is `boltz2_input/boltz2_input_template_force-1.0.yaml`
+structure is strange.
+
 ## `boltz2_input_template_force_potentials.py`
 
 python language
@@ -124,10 +139,35 @@ add `--use_potentials` flag
 output is `boltz2_input/boltz2_input_template_force.yaml`
 structure is strange.
 
-## `boltz2_input_template_force-1.0.py`
+## `boltz2.sh`
+
+bash language
+submission script
+submit boltz2 run in tsubame
+
+# chai-lab
+
+script for run chai-lab, chai-lab can not get right heterodimer of IGF1R/IGF1R
+
+## `chai-lab.py`
 
 python language
-generate input for boltz2, provide template, with force.
-the threshold is from file name
-output is `boltz2_input/boltz2_input_template_force-1.0.yaml`
-structure is strange.
+submission script
+
+## `chai-lab_esm.py`
+
+soft link of `chai-lab.py`
+set `--use_esm_embeddings` to True
+
+## `chai-lab_template.py`
+
+soft link of `chai-lab.py`
+set `--use_msa_server` to True
+set `--use_templates_server` to True
+
+## swiss-model
+
+use website [swiss-model](https://swissmodel.expasy.org) to homology model the structure.
+get right structure.
+structure is `swiss-model/model_01.pdb`
+use pymol to add terminal missing residue, structure is `swiss-model/model_01_add-terminal.pdb`
