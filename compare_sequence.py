@@ -1,106 +1,25 @@
 #!/usr/bin/env python
 import os
 from pathlib import Path
+from fastainfo import FastaInfo
+from pdbinfo import PdbInfo
+from amino_acid import amino_code, amino_code_r
 
 config = {
     "initial_index": {"A": -29, "B": -47, "D": -29},
+    "wt_initial_index": {"A": -29, "B": -29, "C": -47},
     "out_human_fasta_template": os.path.join("result", "human_fasta_{chain_id}.dat"),
     "out_mouse_fasta_template": os.path.join("result", "mouse_fasta_{chain_id}.dat"),
     "out_pdb_fasta_template": os.path.join("result", "pdb_fasta_{chain_id}.dat"),
     "out_pdb_template": os.path.join("result", "pdb_{chain_id}.dat"),
+    "out_wt_template": os.path.join("result", "wt_{chain_id}.dat"),
     "out_format": '{:4d} {} {}\n'
 }
-amino_code = {'CYS': 'C', 'ASP': 'D', 'SER': 'S', 'GLN': 'Q', 'LYS': 'K',
-              'ILE': 'I', 'PRO': 'P', 'THR': 'T', 'PHE': 'F', 'ASN': 'N',
-              'GLY': 'G', 'HIS': 'H', 'LEU': 'L', 'ARG': 'R', 'TRP': 'W',
-              'ALA': 'A', 'VAL': 'V', 'GLU': 'E', 'TYR': 'Y', 'MET': 'M',}
-amino_code_r = dict(zip(amino_code.values(), amino_code.keys()))
-
-
-class FastaInfo():
-    '''Get sequence infomation from fasta file.
-    '''
-    def __init__(self, fastaname):
-        self._fastaname = fastaname
-        self._rawinfo = open(self._fastaname, 'r').readlines()
-        self.get_seq()
-
-    def get_seq(self):
-        self.seq = []
-        seq = ''
-        for rawline in self._rawinfo:
-            line = rawline.strip()
-            if len(line) == 0:
-                continue
-            if line.startswith('>'):
-                if len(seq) != 0:
-                    self.seq.append(seq)
-                    seq = ''
-            else:
-                seq += line
-        if len(seq) != 0:
-            self.seq.append(seq)
-
-
-class PdbInfo():
-    '''Get residue infomation from pdb file. 
-    '''
-
-    def __init__(self, pdbname):
-        self._pdbname = pdbname
-        self._rawinfo = open(self._pdbname, 'r').readlines()
-        self.get_seq()
-        self.get_residue()
-        self.get_missing_residue()
-
-    def get_seq(self):
-        self._seq = {}
-        for rawline in self._rawinfo:
-            if rawline.startswith('SEQRES'):
-                tokens = rawline.strip().split()
-                chain_id = tokens[2]
-                res_3l = tuple(tokens[4:])
-                res_1l = [amino_code[i] for i in res_3l]
-                self.add_dict_data(self._seq, 'extend', chain_id, res_3l)
-
-        # for i in self._seq.values():
-        #     print(len(i))
-
-    def get_missing_residue(self):
-        self.missing_residue = {}
-        record = False
-        for rawline in self._rawinfo:
-            if rawline.startswith('REMARK 465'):
-                line = rawline.strip()
-                if line.endswith('SSSEQI'):
-                    record = True
-                elif record:
-                    res_name = line[15:18]
-                    # res_name = tokens[2]
-                    # chain_id = tokens[3]
-                    chain_id = line[19]
-                    res_seq = int(line[21:26])
-                    self.add_dict_data(self.missing_residue, 'append', chain_id, (res_seq, res_name))
-
-    def add_dict_data(self, d, func_type, chain_id, data):
-        if chain_id not in d.keys():
-            d[chain_id] = []
-        getattr(d[chain_id], func_type)(data)
-
-    def get_residue(self):
-        self.residue = {}
-        for rawline in self._rawinfo:
-            if rawline.startswith('ATOM'):
-                line = rawline.strip()
-                atom_name = line[12:16].strip()
-                if atom_name == 'CA':
-                    res_name = line[17:21].strip()
-                    res_seq = int(line[22:26])
-                    chain_id = line[21]
-                    self.add_dict_data(self.residue, 'append', chain_id, (res_seq, res_name))
-                    # if chain_id not in self.residue.keys():
-                    #     self.residue[chain_id] = []
-                    # self.residue[chain_id].append([res_seq, res_name])
+# amino_code = {'CYS': 'C', 'ASP': 'D', 'SER': 'S', 'GLN': 'Q', 'LYS': 'K',
+#               'ILE': 'I', 'PRO': 'P', 'THR': 'T', 'PHE': 'F', 'ASN': 'N',
+#               'GLY': 'G', 'HIS': 'H', 'LEU': 'L', 'ARG': 'R', 'TRP': 'W',
+#               'ALA': 'A', 'VAL': 'V', 'GLU': 'E', 'TYR': 'Y', 'MET': 'M',}
+# amino_code_r = dict(zip(amino_code.values(), amino_code.keys()))
 
 
 def write_fasta_dat(outname: str, seq: str, length: int, initial_index: int=1, seq_from_index: int=1):
@@ -195,15 +114,13 @@ def main():
         write_fasta_dat(config['out_pdb_fasta_template'].format(chain_id=key), pdb_fasta_dict[key], len_dict[key], config['initial_index'][key], 1)
 
     pdb = PdbInfo("input/initial.pdb")
-    # for key in pdb._seq:
-    #     print(key, pdb._seq[key])
-    # for key in pdb.missing_residue:
-    #     print(key, pdb.missing_residue[key])
-    # for key in pdb.residue:
-    #     print(key, pdb.residue[key])
     for key in pdb.residue:
         write_residue_dat(config['out_pdb_template'].format(chain_id=key), pdb.residue[key], len_dict[key], config['initial_index'][key])
 
+    wt_len_dict = {'A': len(human_fasta_dict['D']), 'B': len(human_fasta_dict['A']), 'C': len(human_fasta_dict['B'])}
+    wt = PdbInfo("swiss-model/model_01_add-terminal_reorder_rmv.pdb")
+    for key in wt.residue:
+        write_residue_dat(config['out_wt_template'].format(chain_id=key), wt.residue[key], wt_len_dict[key], config['wt_initial_index'][key])
 
 if __name__ == '__main__':
     main()

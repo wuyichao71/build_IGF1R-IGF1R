@@ -171,3 +171,5 @@ use website [swiss-model](https://swissmodel.expasy.org) to homology model the s
 get right structure.
 structure is `swiss-model/model_01.pdb`
 use pymol to add terminal missing residue, structure is `swiss-model/model_01_add-terminal.pdb`
+
+`swiss-model/model_01` is use 6PYH as the template, I think that the loop part is not right. It is used to save IGF1
