@@ -118,7 +118,7 @@ def main():
         write_residue_dat(config['out_pdb_template'].format(chain_id=key), pdb.residue[key], len_dict[key], config['initial_index'][key])
 
     wt_len_dict = {'A': len(human_fasta_dict['D']), 'B': len(human_fasta_dict['A']), 'C': len(human_fasta_dict['B'])}
-    wt = PdbInfo("swiss-model/model_01_add-terminal_reorder_rmv.pdb")
+    wt = PdbInfo("swiss-model/model_01/model_01_add-terminal_reorder_rmv.pdb")
     for key in wt.residue:
         write_residue_dat(config['out_wt_template'].format(chain_id=key), wt.residue[key], wt_len_dict[key], config['wt_initial_index'][key])
 

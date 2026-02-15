@@ -175,6 +175,28 @@ use pymol to add terminal missing residue, structure is `swiss-model/model_01_ad
 ### `download_pdb.sh`
 
 bash language
-download pdb of P08069
+download pdb of P08069.
 
-`swiss-model/model_01` is use 6PYH as the template, I think that the loop part is not right. It is used to save IGF1
+### wt IGF1R/IGF1R w/ IGF1
+
+`swiss-model/model_01` is use 6PYH as the template, I think that the loop part is not right.  
+`swiss-model/model_01/model_01.pdb` is predicted by swiss-model.  
+`swiss-model/model_01/model_01_add-terminal.pdb` use pymol to add terminal missing residue.  
+`swiss-model/model_01/model_01_add-terminal_reorder.pdb` change the chain order(A->B, B->C, D->A) (`order_chain.py`).  
+`swiss-model/model_01/model_01_add-terminal_reorder_numbered.pdb` numbered the residue one by one (`number_residue.py`).  
+`swiss-model/model_01/model_01_add-terminal_reorder_numbered_rmv.pdb` removed the useless loop (`remove_loop.py`).  
+`swiss-model/model_01/model_01_add-terminal_reorder_rmv.pdb` removed the useless loop before numbering, it is used for `compare_sequence.py` (`remove_loop_without_number.py`).
+
+handle python script is put to `swiss-model/6pyh_wt_template_script`.
+
+<!-- `swiss-model/model_01/wt.pdb` is a soft link of `swiss-model/model_01/model_01_add-terminal_reorder_numbered_rmv.pdb`.
+`swiss-model/wt` is a soft link of `swiss-model/model_01/`, this is as the wild type IGF1R/IGF1R w/ IGF1.
+**`swiss-model/wt/wt.pdb` is final wild type IGF1R/IGF1R w/ IGF1** -->
+
+### dm IGF1R/IGF1R w/ IGF1
+
+## disulfide bonds
+
+| sequence id | pdb id |
+| ----------- | ------ |
+|             |        |

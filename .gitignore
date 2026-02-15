@@ -10,8 +10,6 @@ chai-lab_input/
 chai-lab_output/
 input/6PYH.pse
 input/6PYH.cif
-swiss-model/model_01/*
-!swiss-model/model_01/model_01_add-terminal_reorder_numbered_rmv.pdb
-!swiss-model/model_01/wt.pdb
+swiss-model/6pyh_wt_template/
 IGF1R_pdb/
 
