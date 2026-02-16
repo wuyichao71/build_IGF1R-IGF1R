@@ -30,6 +30,7 @@ config = {
 
 
 def set_config():
+    os.environ["PATH"] = "/home/2/uj02562/bin:" + os.environ['PATH']
     stem = Path(__file__).stem
     config["fasta_name"] = os.path.join("chai-lab_input", Path(__file__).with_suffix('.fasta').name)
     config["outdir"] = os.path.join("chai-lab_output", stem)
@@ -102,8 +103,8 @@ def run():
 
 
 def submit():
-    TIME = "02:00:00"
-    QUEUE = "gpu_h"
+    TIME = "01:00:00"
+    QUEUE = "gpu_1"
     NODE = 1
     GROUP = grp.getgrgid(os.getgroups()[-1]).gr_name
     JOB_NAME = Path(__file__).stem

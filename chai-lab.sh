@@ -4,7 +4,7 @@ function set_config() {
     TIME="00:30:00"
     QUEUE="gpu_1"
     NODE=1
-    STDOUT='stdout/$JOB_NAME.log'
+    GROUP=$(groups |awk '{print $NF}')
     FASTA="chai-lab_input/chai-lab.fasta"
     
 }
@@ -13,6 +13,7 @@ function activate_environment() {
     # 1. Set Environment
     source ~/data/software/load_conda.sh
     conda activate chai_lab
+    export PATH=~/bin:$PATH
 }
 
 function submission_main() {
@@ -26,15 +27,18 @@ function submission_main() {
 }
 
 function submit() {
-cat >sub_script/${jobname}.sh <<EOF
+    rm -rf ${outdir}
+    mkdir -p ${outdir}
+    script=sub_script/${jobname}.sh 
+    cat >${script} <<EOF
 #!/usr/bin/env bash
-outdir="chai-lab_output/${jobname}"
 input="${FASTA}"
+outdir=\$1
 $(declare -f activate_environment)
 $(declare -f submission_main)
 submission_main
 EOF
-qsub -cwd -j y -l "h_rt=${TIME},${QUEUE}=${NODE}" -o "${STDOUT}" -g "${GROUP}" -N "${jobname}"
+qsub -cwd -j y -l "h_rt=${TIME},${QUEUE}=${NODE}" -o "stdout/${jobname}.log" -g "${GROUP}" ${script} ${outdir}
 }
 
 function main() {
@@ -43,7 +47,7 @@ function main() {
         outdir="$1"
         jobname=$(basename "$outdir")
     else
-        echo "Usage: $0 <job_name>" >&2
+        echo "Usage: $0 <outdir>" >&2
         exit 1
     fi
     submit
