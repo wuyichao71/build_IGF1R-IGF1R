@@ -10,6 +10,21 @@ chai-lab_input/
 chai-lab_output/
 input/6PYH.pse
 input/6PYH.cif
-swiss-model/6pyh_wt_template/
 IGF1R_pdb/
+swiss-model/6pyh_wt_template/
+swiss-model/7sti_wt_template/*
+!swiss-model/7sti_wt_template/model_02.pdb
+!swiss-model/7sti_wt_template/model_02_rloop.pdb
+!swiss-model/7sti_wt_template/model_02_rloop_at.pdb
+!swiss-model/7sti_wt_template/original.pdb
+!swiss-model/7sti_wt_template/wt.pdb
+!swiss-model/7sti_wt_template/*.py
+swiss-model/7sti_dm_template/*
+!swiss-model/7sti_dm_template/model_01.pdb
+!swiss-model/7sti_dm_template/model_01_at.pdb
+!swiss-model/7sti_dm_template/model_01_at_repigf1.pdb
+!swiss-model/7sti_dm_template/original.pdb
+!swiss-model/7sti_dm_template/dm.pdb
+!swiss-model/7sti_dm_template/*.py
+
 

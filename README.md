@@ -177,26 +177,83 @@ use pymol to add terminal missing residue, structure is `swiss-model/model_01_ad
 bash language
 download pdb of P08069.
 
-### wt IGF1R/IGF1R w/ IGF1
+## bad result
 
-`swiss-model/model_01` is use 6PYH as the template, I think that the loop part is not right.  
-`swiss-model/model_01/model_01.pdb` is predicted by swiss-model.  
-`swiss-model/model_01/model_01_add-terminal.pdb` use pymol to add terminal missing residue.  
-`swiss-model/model_01/model_01_add-terminal_reorder.pdb` change the chain order(A->B, B->C, D->A) (`order_chain.py`).  
-`swiss-model/model_01/model_01_add-terminal_reorder_numbered.pdb` numbered the residue one by one (`number_residue.py`).  
-`swiss-model/model_01/model_01_add-terminal_reorder_numbered_rmv.pdb` removed the useless loop (`remove_loop.py`).  
-`swiss-model/model_01/model_01_add-terminal_reorder_rmv.pdb` removed the useless loop before numbering, it is used for `compare_sequence.py` (`remove_loop_without_number.py`).
+`swiss-model/6pyh_wt_template/` is use 6PYH as the template, I think that the loop part is not right.  
+`swiss-model/6pyh_wt_template/model_01.pdb` is predicted by swiss-model.  
+`swiss-model/6pyh_wt_template/model_01_add-terminal.pdb` use pymol to add terminal missing residue.  
+`swiss-model/6pyh_wt_template/model_01_add-terminal_reorder.pdb` change the chain order(A->B, B->C, D->A) (`order_chain.py`).  
+`swiss-model/6pyh_wt_template/model_01_add-terminal_reorder_numbered.pdb` numbered the residue one by one (`number_residue.py`).  
+`swiss-model/6pyh_wt_template/model_01_add-terminal_reorder_numbered_rmv.pdb` removed the useless loop (`remove_loop.py`).  
+`swiss-model/6pyh_wt_template/model_01_add-terminal_reorder_rmv.pdb` removed the useless loop before numbering, it is used for `compare_sequence.py` (`remove_loop_without_number.py`).
 
 handle python script is put to `swiss-model/6pyh_wt_template_script`.
 
-<!-- `swiss-model/model_01/wt.pdb` is a soft link of `swiss-model/model_01/model_01_add-terminal_reorder_numbered_rmv.pdb`.
-`swiss-model/wt` is a soft link of `swiss-model/model_01/`, this is as the wild type IGF1R/IGF1R w/ IGF1.
-**`swiss-model/wt/wt.pdb` is final wild type IGF1R/IGF1R w/ IGF1** -->
+### wt IGF1R/IGF1R w/ IGF1
+
+`swiss-model/7sti_wt_template/` is the directory for wild type of IGF1R/IGF1R w/ IGF1.  
+`swiss-model/wt` is soft link of it, this is as the wild type IGF1R/IGF1R w/ IGF1.
+
+`swiss-model/7sti_wt_template/model_02.pdb` is predicted by swiss-model, template is 7STI.  
+`swiss-model/7sti_wt_template/model_02_rloop.pdb` replace the bad loop by loop from `swiss-model/7sti_dm_template/model_01.pdb`.
+`swiss-model/7sti_wt_template/model_02_rloop_at.pdb` add terminal missing residues by pymol.
+`swiss-model/7sti_wt_template/original.pdb` is a soft link of `swiss-model/7sti_wt_template/model_02_rloop_at.pdb`.
+`swiss-model/7sti_wt_template/gap.pdb` is a soft link of `swiss-model/7sti_wt_template/original.pdb`, in deletion mutant, it adds the residue index of mutant part.
+`swiss-model/7sti_wt_template/order.pdb` is reorder the chain id. script is `swiss-model/7sti_wt_template/order.py`.
+`swiss-model/7sti_wt_template/remove_loop.pdb` is remove the useless loop. script is `swiss-model/7sti_wt_template/remove_loop.py`.
+
+`swiss-model/7sti_wt_template/wt.pdb` is a soft link of `swiss-model/7sti_wt_template/remove_loop.pdb`.
+**`swiss-model/wt/wt.pdb` is final wild type IGF1R/IGF1R w/ IGF1**
 
 ### dm IGF1R/IGF1R w/ IGF1
 
+`swiss-model/7sti_dm_template/` is the directory for deletion mutant IGF1R/IGF1R w/ IGF1.  
+`swiss-model/dm` is soft link of it, this is as the deletion mutant IGF1R/IGF1R w/ IGF1.
+
+`swiss-model/7sti_dm_template/model_01.pdb` is predicted by swiss-model, template is 7STI.  
+`swiss-model/7sti_dm_template/model_01_at.pdb` add terminal missing residues by pymol.
+`swiss-model/7sti_dm_template/model_01_at_repigf1.pdb` replaces the IGF1 from `swiss-model/7sti_wt_template/model_02_rloop_at.pdb`.
+`swiss-model/7sti_dm_template/original.pdb` is a soft link of `swiss-model/7sti_dm_template/model_01_at_repigf1.pdb`.
+`swiss-model/7sti_dm_template/gap.pdb` adds the residue index of mutant part. script is `swiss-model/7sti_dm_template/add_gap.py`.
+`swiss-model/7sti_dm_template/order.pdb` is reorder the chain id. script is `swiss-model/7sti_dm_template/order.py`.
+`swiss-model/7sti_dm_template/remove_loop.pdb` is remove the useless loop. script is `swiss-model/7sti_dm_template/remove_loop.py`.
+
+`swiss-model/7sti_dm_template/dm.pdb` is a soft link of `swiss-model/7sti_dm_template/remove_loop.pdb`.
+**`swiss-model/dm/dm.pdb` is final deletion mutant IGF1R/IGF1R w/ IGF1**
+
 ## disulfide bonds
 
-| sequence id | pdb id |
-| ----------- | ------ |
-|             |        |
+| sequence id | pdb id            | charmm id |
+| ----------- | ----------------- | --------- |
+|             | intra-IGF1R       |           |
+|             |                   |           |
+|             |                   |           |
+|             |                   |           |
+|             |                   |           |
+|             |                   |           |
+|             | intra-IGF1R       |           |
+|             |                   |           |
+|             |                   |           |
+|             |                   |           |
+|             |                   |           |
+|             |                   |           |
+|             | intra-IGF1        |           |
+|             |                   |           |
+|             |                   |           |
+|             |                   |           |
+|             |                   |           |
+|             |                   |           |
+|             |                   |           |
+|             |                   |           |
+|             | inter-IGF1R-IGF1R |           |
+|             |                   |           |
+|             |                   |           |
+|             |                   |           |
+|             |                   |           |
+|             |                   |           |
+|             |                   |           |
+|             |                   |           |
+|             |                   |           |
+|             |                   |           |
+|             |                   |           |
+|             |                   |           |
