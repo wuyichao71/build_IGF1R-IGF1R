@@ -198,7 +198,7 @@ handle python script is put to `swiss-model/6pyh_wt_template_script`.
 `swiss-model/7sti_wt_template/model_02_rloop.pdb` replace the bad loop by loop from `swiss-model/7sti_dm_template/model_01.pdb`.
 `swiss-model/7sti_wt_template/model_02_rloop_at.pdb` add terminal missing residues by pymol.
 `swiss-model/7sti_wt_template/original.pdb` is a soft link of `swiss-model/7sti_wt_template/model_02_rloop_at.pdb`.
-`swiss-model/7sti_wt_template/gap.pdb` is a soft link of `swiss-model/7sti_wt_template/original.pdb`, in deletion mutant, it adds the residue index of mutant part.
+`swiss-model/7sti_wt_template/gap.pdb` adds the residue index of mutant part and chain C (IGF1). script is `swiss-model/7sti_wt_template/add_gap.py`.
 `swiss-model/7sti_wt_template/order.pdb` is reorder the chain id. script is `swiss-model/7sti_wt_template/order.py`.
 `swiss-model/7sti_wt_template/remove_loop.pdb` is remove the useless loop. script is `swiss-model/7sti_wt_template/remove_loop.py`.
 
@@ -214,7 +214,7 @@ handle python script is put to `swiss-model/6pyh_wt_template_script`.
 `swiss-model/7sti_dm_template/model_01_at.pdb` add terminal missing residues by pymol.
 `swiss-model/7sti_dm_template/model_01_at_repigf1.pdb` replaces the IGF1 from `swiss-model/7sti_wt_template/model_02_rloop_at.pdb`.
 `swiss-model/7sti_dm_template/original.pdb` is a soft link of `swiss-model/7sti_dm_template/model_01_at_repigf1.pdb`.
-`swiss-model/7sti_dm_template/gap.pdb` adds the residue index of mutant part. script is `swiss-model/7sti_dm_template/add_gap.py`.
+`swiss-model/7sti_dm_template/gap.pdb` adds the residue index of mutant part and chain C (IGF1). script is `swiss-model/7sti_dm_template/add_gap.py`.
 `swiss-model/7sti_dm_template/order.pdb` is reorder the chain id. script is `swiss-model/7sti_dm_template/order.py`.
 `swiss-model/7sti_dm_template/remove_loop.pdb` is remove the useless loop. script is `swiss-model/7sti_dm_template/remove_loop.py`.
 
@@ -223,37 +223,119 @@ handle python script is put to `swiss-model/6pyh_wt_template_script`.
 
 ## disulfide bonds
 
-| sequence id | pdb id            | charmm id |
-| ----------- | ----------------- | --------- |
-|             | intra-IGF1R       |           |
-|             |                   |           |
-|             |                   |           |
-|             |                   |           |
-|             |                   |           |
-|             |                   |           |
-|             | intra-IGF1R       |           |
-|             |                   |           |
-|             |                   |           |
-|             |                   |           |
-|             |                   |           |
-|             |                   |           |
-|             | intra-IGF1        |           |
-|             |                   |           |
-|             |                   |           |
-|             |                   |           |
-|             |                   |           |
-|             |                   |           |
-|             |                   |           |
-|             |                   |           |
-|             | inter-IGF1R-IGF1R |           |
-|             |                   |           |
-|             |                   |           |
-|             |                   |           |
-|             |                   |           |
-|             |                   |           |
-|             |                   |           |
-|             |                   |           |
-|             |                   |           |
-|             |                   |           |
-|             |                   |           |
-|             |                   |           |
+| sequence id | pdb id            | charmm id       |
+| ----------- | ----------------- | --------------- |
+|             | intra-IGF1R(A)    |                 |
+| 3-22        | A3-A22            | PROA3-PROA22    |
+| 120-148     | A120-A148         | PROA120-PROA148 |
+| 152-175     | A152-A175         | PROA152-PROA175 |
+| 162-181     | A162-A181         | PROA162-PROA181 |
+| 185-194     | A185-A194         | PROA185-PROA194 |
+| 189-200     | A189-A200         | PROA189-PROA200 |
+| 201-209     | A201-A209         | PROA201-PROA209 |
+| 205-218     | A205-A218         | PROA205-PROA218 |
+| 221-230     | A221-A230         | PROA221-PROA230 |
+| 234-246     | A234-A246         | PROA234-PROA246 |
+| 252-273     | A252-A273         | PROA252-PROA273 |
+| 277-291     | A277-A291         | PROA277-PROA291 |
+| 294-298     | A294-A298         | PROA294-PROA298 |
+| 302-323     | A302-A323         | PROA302-PROA323 |
+| 425-458     | A425-A458         | PROA425-PROA458 |
+| 633-849     | A633-A849         | PROA633-PROB849 |
+| 669-672     | A669-A672         | PROA669-PROA672 |
+| 776-785     | A776-A785         | PROA776-PROB785 |
+|             | intra-IGF1R(B)    |                 |
+| 3-22        | B3-B22            | PROC3-PROC22    |
+| 120-148     | B120-B148         | PROC120-PROC148 |
+| 152-175     | B152-B175         | PROC152-PROC175 |
+| 162-181     | B162-B181         | PROC162-PROC181 |
+| 185-194     | B185-B194         | PROC185-PROC194 |
+| 189-200     | B189-B200         | PROC189-PROC200 |
+| 201-209     | B201-B209         | PROC201-PROC209 |
+| 205-218     | B205-B218         | PROC205-PROC218 |
+| 221-230     | B221-B230         | PROC221-PROC230 |
+| 234-246     | B234-B246         | PROC234-PROC246 |
+| 252-273     | B252-B273         | PROC252-PROC273 |
+| 277-291     | B277-B291         | PROC277-PROC291 |
+| 294-298     | B294-B298         | PROC294-PROC298 |
+| 302-323     | B302-B323         | PROC302-PROC323 |
+| 425-458     | B425-B458         | PROC425-PROC458 |
+| 633-849     | B633-B849         | PROC633-PROD849 |
+| 669-672     | B669-B672         | PROC669-PROC672 |
+| 776-785     | B776-B785         | PROC776-PROD785 |
+|             | intra-IGF1(C)     |                 |
+| 6-48        | C6-C48            | PROE6-PROE48    |
+| 18-61       | C18-C61           | PROE18-PROE61   |
+| 47-52       | C47-C52           | PROE47-PROE52   |
+|             | inter-IGF1R-IGF1R |                 |
+| 514-514     | A514-B514         | PROA514-PROC514 |
+| 670-670     | A670-B670         | PROA670-PROC670 |
+
+check:  
+A514-B514:  
+1IGF do not have  
+5U8Q exist  
+5U8R do not have  
+6JK8 do not have  
+6VWG+6VWH do not have  
+6VWI+6VWJ do not have  
+7S0Q+7S8V exist  
+7U23 do not have  
+7V3P do not have  
+7XGD not exist  
+7XLC not exist  
+7YRR not exist  
+8TAN not exist but close
+
+## protonation state
+
+| sequence id  | pdb id         | charmm id        |
+| ------------ | -------------- | ---------------- |
+|              | intra-IGF1R(A) |                  |
+| 30 HIS->HSE  | A30 HIS->HSE   | PROA30 HIS->HSE  |
+| 202 HIS->HSD | A202 HIS->HSD  | PROA202 HIS->HSD |
+| 223 HIS->HSE | A223 HIS->HSE  | PROA223 HIS->HSE |
+| 269 HIS->HSE | A269 HIS->HSE  | PROA269 HIS->HSE |
+| 362 HIS->HSE | A362 HIS->HSE  | PROA362 HIS->HSE |
+| 364 HIS->HSE | A364 HIS->HSE  | PROA364 HIS->HSE |
+| 406 HIS->HSE | A406 HIS->HSE  | PROA406 HIS->HSE |
+| 464 HIS->HSE | A464 HIS->HSE  | PROA464 HIS->HSE |
+| 480 HIS->HSD | A480 HIS->HSD  | PROA480 HIS->HSD |
+| 539 HIS->HSE | A539 HIS->HSE  | PROA539 HIS->HSE |
+| 563 HIS->HSE | A563 HIS->HSE  | PROA563 HIS->HSE |
+| 630 HIS->HSD | A630 HIS->HSD  | PROA630 HIS->HSD |
+| 697 HIS->HSE | A697 HIS->HSE  | PROA697 HIS->HSE |
+| 774 HIS->HSD | A774 HIS->HSD  | PROB774 HIS->HSD |
+| 778 HIS->HSD | A778 HIS->HSD  | PROB778 HIS->HSD |
+|              | intra-IGF1R(B) |                  |
+| 30 HIS->HSE  | B30 HIS->HSE   | PROC30 HIS->HSE  |
+| 202 HIS->HSD | B202 HIS->HSD  | PROC202 HIS->HSD |
+| 223 HIS->HSE | B223 HIS->HSE  | PROC223 HIS->HSE |
+| 269 HIS->HSE | B269 HIS->HSE  | PROC269 HIS->HSE |
+| 362 HIS->HSE | B362 HIS->HSE  | PROC362 HIS->HSE |
+| 364 HIS->HSE | B364 HIS->HSE  | PROC364 HIS->HSE |
+| 406 HIS->HSE | B406 HIS->HSE  | PROC406 HIS->HSE |
+| 464 HIS->HSE | B464 HIS->HSE  | PROC464 HIS->HSE |
+| 480 HIS->HSD | B480 HIS->HSD  | PROC480 HIS->HSD |
+| 539 HIS->HSE | B539 HIS->HSE  | PROC539 HIS->HSE |
+| 563 HIS->HSE | B563 HIS->HSE  | PROC563 HIS->HSE |
+| 630 HIS->HSD | B630 HIS->HSD  | PROC630 HIS->HSD |
+| 697 HIS->HSE | B697 HIS->HSE  | PROC697 HIS->HSE |
+| 774 HIS->HSD | B774 HIS->HSD  | PROD774 HIS->HSD |
+| 778 HIS->HSD | B778 HIS->HSD  | PROD778 HIS->HSD |
+|              | intra-IGF1(C)  |                  |
+|              |                |                  |
+
+## `charmm-gui`
+
+the force field of wild type IGF1R/IGF1R w/ IGF1 is `swiss-model/wt/charmm-gui/charmm-gui-7122467825/`  
+the force field of deletion mutant IGF1R/IGF1R w/ IGF1 is `swiss-model/dm/charmm-gui/charmm-gui-7122866311/`  
+here set `{wt} = swiss-model/wt/charmm-gui/charmm-gui-7122467825/` and `{dm} = swiss-model/dm/charmm-gui/charmm-gui-7122866311/`
+
+### `{wt}/gromacs_run`
+
+### `{wt}genesis_run_gmx_convert`
+
+### `{dm}/gromacs_run`
+
+### `{dm}genesis_run_gmx_convert`

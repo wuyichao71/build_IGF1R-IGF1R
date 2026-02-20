@@ -6,14 +6,15 @@ config = {
     "out_template": os.path.join("gap.pdb"),
     "start_resid": 681,
     "shift": 4,
+    'C_shift': 2,
 }
 
 
 def set_config():
-    pass
+    config["dir_type"] = Path(os.getcwd()).name
+    # print(config["dir_type"])
 
-
-def add_gap(inname: str, outname: str, start_resid: int, shift: int):
+def add_gap(inname: str, outname: str, start_resid: int, shift: int, C_shift: int=0):
     '''
     add gap into the pdb file
     
@@ -31,15 +32,19 @@ def add_gap(inname: str, outname: str, start_resid: int, shift: int):
         for line in inp:
             if line.startswith("ATOM") or line.startswith("HETATM"):
                 resid = int(line[22:26])
-                if resid >= start_resid:
-                    resid += shift
+                if 'dm' in config["dir_type"]:
+                    if resid >= start_resid:
+                        resid += shift
+                        line = line[:22] + f"{resid:4d}" + line[26:]
+                if line[21] == 'C':
+                    resid += C_shift
                     line = line[:22] + f"{resid:4d}" + line[26:]
             out.write(line)
 
 
 def main():
     set_config()
-    add_gap(config["in_template"], config["out_template"], config["start_resid"], config["shift"])
+    add_gap(config["in_template"], config["out_template"], config["start_resid"], config["shift"], config['C_shift'])
 
 if __name__ == "__main__":
     main()

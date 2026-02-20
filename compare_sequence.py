@@ -8,18 +8,17 @@ from amino_acid import amino_code, amino_code_r
 config = {
     "initial_index": {"A": -29, "B": -47, "D": -29},
     "wt_initial_index": {"A": -29, "B": -29, "C": -47},
+    "wt_shift_index": {"A": 0, "B": 0, "C": 2},
+    "dm_initial_index": {"A": -29, "B": -29, "C": -47},
+    "dm_shift_index": {"A": 0, "B": 0, "C": 2},
     "out_human_fasta_template": os.path.join("result", "human_fasta_{chain_id}.dat"),
     "out_mouse_fasta_template": os.path.join("result", "mouse_fasta_{chain_id}.dat"),
     "out_pdb_fasta_template": os.path.join("result", "pdb_fasta_{chain_id}.dat"),
     "out_pdb_template": os.path.join("result", "pdb_{chain_id}.dat"),
     "out_wt_template": os.path.join("result", "wt_{chain_id}.dat"),
+    "out_dm_template": os.path.join("result", "dm_{chain_id}.dat"),
     "out_format": '{:4d} {} {}\n'
 }
-# amino_code = {'CYS': 'C', 'ASP': 'D', 'SER': 'S', 'GLN': 'Q', 'LYS': 'K',
-#               'ILE': 'I', 'PRO': 'P', 'THR': 'T', 'PHE': 'F', 'ASN': 'N',
-#               'GLY': 'G', 'HIS': 'H', 'LEU': 'L', 'ARG': 'R', 'TRP': 'W',
-#               'ALA': 'A', 'VAL': 'V', 'GLU': 'E', 'TYR': 'Y', 'MET': 'M',}
-# amino_code_r = dict(zip(amino_code.values(), amino_code.keys()))
 
 
 def write_fasta_dat(outname: str, seq: str, length: int, initial_index: int=1, seq_from_index: int=1):
@@ -49,7 +48,7 @@ def write_fasta_dat(outname: str, seq: str, length: int, initial_index: int=1, s
                 out.write(out_format.format(index, '-', '---'))
 
 
-def write_residue_dat(outname:str, data: tuple, length: int, initial_index: int=1):
+def write_residue_dat(outname:str, data: tuple, length: int, initial_index: int=1, shift_index: int=0):
     '''
     output the sequence of pdb existed residue into a dat file
     
@@ -68,10 +67,10 @@ def write_residue_dat(outname:str, data: tuple, length: int, initial_index: int=
         i = 0
         while i < length:
             index = i + initial_index
-            if data_index == len(data) or index < data[data_index][0]:
+            if data_index == len(data) or index < data[data_index][0] + shift_index:
                 out.write(out_format.format(index, '-', '---'))
                 i += 1
-            elif index == data[data_index][0]:
+            elif index == data[data_index][0] + shift_index:
                 out.write(out_format.format(index, amino_code[data[data_index][1]], data[data_index][1]))
                 data_index += 1
                 i += 1
@@ -118,9 +117,14 @@ def main():
         write_residue_dat(config['out_pdb_template'].format(chain_id=key), pdb.residue[key], len_dict[key], config['initial_index'][key])
 
     wt_len_dict = {'A': len(human_fasta_dict['D']), 'B': len(human_fasta_dict['A']), 'C': len(human_fasta_dict['B'])}
-    wt = PdbInfo("swiss-model/model_01/model_01_add-terminal_reorder_rmv.pdb")
+    wt = PdbInfo("swiss-model/wt/wt.pdb")
     for key in wt.residue:
-        write_residue_dat(config['out_wt_template'].format(chain_id=key), wt.residue[key], wt_len_dict[key], config['wt_initial_index'][key])
+        write_residue_dat(config['out_wt_template'].format(chain_id=key), wt.residue[key], wt_len_dict[key], config['wt_initial_index'][key], config['wt_shift_index'][key])
+
+    dm_len_dict = {'A': len(human_fasta_dict['D']), 'B': len(human_fasta_dict['A']), 'C': len(human_fasta_dict['B'])}
+    dm = PdbInfo("swiss-model/dm/dm.pdb")
+    for key in dm.residue:
+        write_residue_dat(config['out_dm_template'].format(chain_id=key), dm.residue[key], dm_len_dict[key], config['dm_initial_index'][key], config['dm_shift_index'][key])
 
 if __name__ == '__main__':
     main()
